@@ -15,6 +15,7 @@ def main():
     list = []
 
     update = False
+    keywordLoading = False
 
     if len(sys.argv) == 1:
         list = os.listdir('./')
@@ -24,6 +25,8 @@ def main():
         list = os.listdir(sys.argv[1])
         if sys.argv[2] == '-u':
             update = True
+        elif sys.argv[2] == '-k':
+            keywordLoading = True
     else:
         print('请将语音文件放至本脚本同目录执行本脚本\n或者\n命令行运行本脚本并带上语音文件目录参数')
         return
@@ -34,7 +37,7 @@ def main():
     
     # Read manifest.json
     path = 'manifest.json'
-    if update:
+    if update or keywordLoading:
         path = os.path.join(sys.argv[1], path)
 
     if not os.path.exists(path):
@@ -43,6 +46,10 @@ def main():
 
     with open(path, 'r', encoding='utf-8') as f:
         content = json.loads(f.read())
+
+    if keywordLoading:
+        keywordOverloading(content, path)
+        return
 
     for c in content['contributes']:
         newVoices = []
@@ -68,6 +75,26 @@ def detectionFormat(suffix):
             return True
     return False
 
+'''
+@description: Reload keywords as "keywords" "keywords " " keywords "
+@param {type} 
+@return: 
+'''
+def keywordOverloading(content, path):
+    for i in content['contributes']:
+        list1 = set()
+        for ii in i['keywords']:
+            list1.add(ii.strip())
+        list1 = list(list1)
+        list2 = []
+        list3 = []
+        for j in list1:
+            list2.append(j + ' ')
+            list3.append(' ' + j + ' ')
+        list1 = list1 + list2 + list3
+        i['keywords'] = list1
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(content))
 
 if __name__ == "__main__":
     main()
