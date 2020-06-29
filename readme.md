@@ -3,5 +3,5 @@
 老铁们昂，只有你们想不到带，没有老八zhuo不到dia！
 
 ### 使用
-在 releases 下载压缩包 `.zip` ，之后在控制台加载即可。
+在 [releases](https://github.com/fz6m/laoba-rainbow-fart/releases) 下载压缩包 `.zip` ，之后在控制台加载即可。
 
